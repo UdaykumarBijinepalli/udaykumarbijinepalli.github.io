@@ -283,7 +283,7 @@ function App() {
             <span className="mini-label">07 — CONTACT</span>
             <h2>Ready for<br /><em>what's next?</em></h2>
             <p>I’m open to Software Engineering, Cloud, DevOps and infrastructure-focused opportunities.</p>
-            <div className="contact-actions"><a className="button button--solid" href={`mailto:${profile.email}`}>Email me ↗</a><a className="button button--ghost" href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a><a className="button button--ghost" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a><a className="button button--ghost button--social" href={profile.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a><a className="button button--ghost" href={profile.instagram} target="_blank" rel="noreferrer">Instagram ↗</a></div>
+            <div className="contact-actions"><a className="button button--solid" href={`mailto:${profile.email}`}>Email me ↗</a><a className="button button--ghost button--resume" href="/resume.pdf" download="Uday-Kumar-B-Resume.pdf">Download resume ↓</a><a className="button button--ghost" href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a><a className="button button--ghost" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a><a className="button button--ghost button--social" href={profile.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a><a className="button button--ghost" href={profile.instagram} target="_blank" rel="noreferrer">Instagram ↗</a></div>
           </div>
         </section>
       </main>
