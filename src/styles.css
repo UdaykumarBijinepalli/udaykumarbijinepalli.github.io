@@ -129,3 +129,44 @@ section{position:relative;padding:clamp(90px,10vw,150px) clamp(20px,6vw,110px)}.
   .project-card{flex:0 0 72vw}
 }
 @media(max-width:620px){.project-card{flex-basis:84vw}}
+
+/* v11 mobile responsive fixes */
+@media (max-width: 620px){
+  /* Keep the system visual in its own upper band so it never collides with the headline. */
+  .hero-system{
+    top:108px;
+    height:31vh;
+    min-height:250px;
+    max-height:290px;
+    opacity:.48;
+  }
+  .hero-copy{
+    padding-top:0;
+    margin-top:0;
+  }
+  .hero h1{
+    font-size:clamp(60px, 17.5vw, 70px);
+    line-height:.88;
+    margin-top:14px;
+  }
+  .hero-meta{
+    top:108px;
+    left:20px;
+    right:20px;
+  }
+  .hero-meta span:last-child{
+    max-width:120px;
+    text-align:right;
+    line-height:1.35;
+  }
+
+  /* The stack groups should wrap to their content instead of inheriting the desktop card height. */
+  .skill-group{
+    min-height:0;
+    padding-bottom:42px;
+  }
+  .skill-cloud{
+    margin-top:22px;
+    gap:8px;
+  }
+}
