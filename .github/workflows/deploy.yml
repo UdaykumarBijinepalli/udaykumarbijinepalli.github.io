@@ -31,13 +31,16 @@ jobs:
           cache: npm
 
       - name: Apply staged portfolio source update
-        if: hashFiles('release-payload.xz.b64') != ''
+        if: hashFiles('release-payload.part-*') != ''
+        shell: bash
         run: |
-          base64 --decode release-payload.xz.b64 | tar -xJf -
-          rm release-payload.xz.b64
+          set -euo pipefail
+          cat release-payload.part-01 release-payload.part-02 release-payload.part-03 > release-payload.xz.b64.tmp
+          base64 --decode release-payload.xz.b64.tmp | tar -xJf -
+          rm -f release-payload.xz.b64.tmp release-payload.xz.b64 release-payload.part-01 release-payload.part-02 release-payload.part-03
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/main.jsx src/styles.css release-payload.xz.b64
+          git add -A
           git commit -m "Update portfolio projects and readability"
           git push origin HEAD:${GITHUB_REF_NAME}
 
