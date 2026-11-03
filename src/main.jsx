@@ -13,7 +13,158 @@ const profile = {
   instagram: 'https://instagram.com/the_name_is_uday3'
 };
 
-const projects = [
+const deploymentProjects = [
+  {
+    number: '01',
+    type: 'AWS • KUBERNETES • MICROSERVICES',
+    title: 'Cloud-Native Microservices Deployment on AWS EKS',
+    description: 'Provisioned AWS networking and an EKS managed node group with Terraform, then deployed a polyglot microservices application using Helm and NGINX Ingress. Added Prometheus/Grafana observability and Locust traffic simulation to explore workload behaviour.',
+    stack: ['Terraform', 'AWS VPC', 'Amazon EKS', 'Kubernetes', 'Helm', 'NGINX Ingress', 'GitHub Actions', 'Prometheus', 'Grafana', 'Locust'],
+    flow: ['TERRAFORM', 'AWS VPC + EKS', 'HELM RELEASE', 'NGINX INGRESS', 'OBSERVABILITY'],
+    visual: 'eks',
+    details: {
+      architecture: 'Terraform provisions the AWS network and EKS cluster resources. A managed node group runs the Kubernetes workloads; Helm deploys the microservices and NGINX Ingress exposes application routes. Prometheus and Grafana provide cluster/workload visibility, while Locust generates test traffic.',
+      implementation: [
+        'Defined the AWS infrastructure with Terraform, including VPC and EKS-related resources.',
+        'Deployed the multi-service application to Kubernetes using Helm charts.',
+        'Configured NGINX Ingress for application access and routing.',
+        'Added Prometheus and Grafana monitoring, then used Locust to simulate traffic.',
+        'Used GitHub Actions for workflow automation and validation.'
+      ],
+      engineering: 'During monitoring setup, Prometheus pod scheduling was blocked by resource requests. Adjusting the CPU requests resolved the scheduling issue and allowed the monitoring components to run.',
+      result: 'A hands-on AWS EKS deployment covering infrastructure provisioning, Kubernetes application delivery, ingress, observability and load simulation.'
+    }
+  },
+  {
+    number: '02',
+    type: 'CONFIGURATION MANAGEMENT • AWS',
+    title: 'Automated Full-Stack Deployment with Ansible',
+    description: 'Automated application delivery across AWS EC2 workers using Ansible playbooks launched from a control node through a GitHub Actions workflow. The playbooks handle application setup, frontend build steps, PM2 process management and NGINX reverse-proxy configuration.',
+    stack: ['AWS EC2', 'Ansible', 'GitHub Actions', 'NGINX', 'Node.js', 'Express', 'PM2', 'MongoDB', 'Linux'],
+    flow: ['GIT PUSH', 'GITHUB ACTIONS', 'ANSIBLE CONTROL', 'EC2 WORKERS', 'NGINX + PM2'],
+    visual: 'ansible',
+    details: {
+      architecture: 'A GitHub Actions workflow connects over SSH to the Ansible control host. Ansible inventory and playbooks then configure the target EC2 worker instances, install application dependencies, build the frontend and manage the backend process with PM2. NGINX handles incoming web/API routing.',
+      implementation: [
+        'Organized target instances in an Ansible inventory and connected to workers over SSH.',
+        'Used playbooks to synchronize application files and install required packages and dependencies.',
+        'Ran frontend build steps as part of deployment.',
+        'Managed the Node.js/Express backend process with PM2.',
+        'Configured NGINX as the reverse proxy and triggered the automation from GitHub Actions.'
+      ],
+      engineering: 'The deployment required coordinating SSH access, inventory targeting, application dependencies, process state and reverse-proxy routing across more than one server.',
+      result: 'A repeatable configuration-management workflow for deploying and configuring a full-stack application across EC2 instances.'
+    }
+  },
+  {
+    number: '03',
+    type: 'DOCKER • AWS EC2 • REVERSE PROXY',
+    title: 'Containerized Full-Stack Application Delivery',
+    description: 'Containerized the frontend and backend and deployed them on separate AWS EC2 instances connected through a private network path. GitHub Actions automates remote delivery, while NGINX routes browser requests and API traffic to the appropriate service.',
+    stack: ['AWS EC2', 'Docker', 'NGINX', 'GitHub Actions', 'React', 'Node.js', 'Express', 'Linux', 'VPC'],
+    flow: ['GIT PUSH', 'GITHUB ACTIONS', 'FRONTEND EC2', 'NGINX ROUTING', 'BACKEND EC2'],
+    visual: 'docker',
+    details: {
+      architecture: 'The frontend and backend run as containerized workloads on separate EC2 instances. NGINX provides the web entry point and forwards API requests to the backend over the private network. GitHub Actions initiates the remote deployment workflow.',
+      implementation: [
+        'Built Docker images for the frontend and backend application components.',
+        'Deployed the application components to separate EC2 instances.',
+        'Configured NGINX to serve frontend traffic and proxy API paths to the backend.',
+        'Used GitHub Actions to automate remote deployment steps.',
+        'Validated application and API reachability after deployment.'
+      ],
+      engineering: 'A key debugging lesson was that browser-side API calls cannot use localhost to reach a backend on another server. The frontend API endpoint and NGINX proxy paths had to match the actual deployment topology.',
+      result: 'A two-tier container deployment that demonstrates image-based delivery, EC2 networking and reverse-proxy configuration.'
+    }
+  },
+  {
+    number: '04',
+    type: 'KUBERNETES • CONTAINER ORCHESTRATION',
+    title: 'Kubernetes-Based Application Deployment',
+    description: 'Deployed a containerized application to a Kubernetes cluster running on an AWS EC2 lab environment with Minikube. Created Kubernetes Deployments and Services, configured application connectivity and used kubectl to validate rollout and access.',
+    stack: ['AWS EC2', 'Ubuntu', 'Docker', 'Minikube', 'Kubernetes', 'kubectl', 'NGINX', 'GitHub Actions'],
+    flow: ['CODE + IMAGE', 'MINIKUBE', 'DEPLOYMENTS', 'SERVICES', 'RUNNING WORKLOAD'],
+    visual: 'kubernetes',
+    details: {
+      architecture: 'An EC2-hosted Minikube cluster provides the Kubernetes environment. Container images are deployed through Kubernetes Deployment resources and exposed through Services for stable in-cluster or external access, depending on the service type.',
+      implementation: [
+        'Prepared an Ubuntu EC2 environment with Docker and Minikube.',
+        'Created Deployment and Service manifests for the application workloads.',
+        'Configured service ports and verified application access with kubectl and curl.',
+        'Practiced workload lifecycle operations, including inspecting and removing resources.',
+        'Used GitHub Actions in the deployment workflow.'
+      ],
+      engineering: 'The lab involved troubleshooting host resource limits and Docker permissions before the cluster could start reliably. Service exposure and port mapping were then validated independently from pod readiness.',
+      result: 'Practical experience with Kubernetes workload resources, service discovery, deployment verification and cluster troubleshooting in a self-managed lab.'
+    }
+  },
+  {
+    number: '05',
+    type: 'OBSERVABILITY • METRICS • DASHBOARDS',
+    title: 'Kubernetes Monitoring with Prometheus & Grafana',
+    description: 'Installed the kube-prometheus-stack on a Kubernetes lab cluster using Helm and connected Grafana to Prometheus for metrics visualization. Explored cluster and workload dashboards and investigated resource requirements when monitoring pods could not be scheduled.',
+    stack: ['Kubernetes', 'Minikube', 'Helm', 'Prometheus', 'Grafana', 'kubectl'],
+    flow: ['HELM', 'PROMETHEUS', 'METRICS', 'GRAFANA', 'DASHBOARDS'],
+    visual: 'monitoring',
+    details: {
+      architecture: 'Helm installs the kube-prometheus-stack into the Kubernetes cluster. Prometheus collects metrics from configured targets, and Grafana uses Prometheus as a data source to display cluster and workload metrics in dashboards.',
+      implementation: [
+        'Enabled and prepared the Kubernetes monitoring environment.',
+        'Installed kube-prometheus-stack through Helm.',
+        'Located the Prometheus service and configured Grafana to use the in-cluster service DNS name as its data source.',
+        'Opened Grafana dashboards to inspect cluster and workload metrics.',
+        'Reviewed pod status and resource requests while validating the monitoring stack.'
+      ],
+      engineering: 'Prometheus pod scheduling exposed the impact of CPU resource requests on a small lab cluster. Reviewing and tuning those requests helped the monitoring components schedule successfully.',
+      result: 'A working observability lab demonstrating metrics collection, Grafana data-source configuration and Kubernetes resource troubleshooting.'
+    }
+  },
+  {
+    number: '06',
+    type: 'DOCKER COMPOSE • DATA PERSISTENCE',
+    title: 'MongoDB Persistent Storage & Backup/Restore',
+    description: 'Ran a Node.js application and MongoDB with Docker Compose, separating live database storage from backup archives. Verified that database files persisted across container recreation and practised archive-based backup and restore with mongodump and mongorestore.',
+    stack: ['AWS EC2', 'Ubuntu', 'Docker', 'Docker Compose', 'MongoDB 7', 'Docker Volumes', 'mongodump', 'mongorestore'],
+    flow: ['NODE APP', 'DOCKER COMPOSE', 'MONGODB', '/DATA/DB', '/BACKUP'],
+    visual: 'mongodb',
+    details: {
+      architecture: 'Docker Compose runs the application and MongoDB services. A persistent volume mounted at /data/db stores MongoDB live database files. A separate volume mounted at /backup stores exported backup archives created by database backup tools.',
+      implementation: [
+        'Defined the application and MongoDB services in a Docker Compose file.',
+        'Mounted persistent storage at /data/db for the live MongoDB database.',
+        'Mounted a separate backup location at /backup for archive files.',
+        'Created database backups with mongodump and restored them with mongorestore.',
+        'Recreated containers and checked that persisted database data remained available.'
+      ],
+      engineering: 'The important distinction was between a live database volume and a backup destination: /data/db holds MongoDB working files, while /backup holds exported backup archives. They serve different purposes and are not interchangeable.',
+      result: 'A practical lab covering containerized stateful services, Docker volume mounts, persistence testing and MongoDB backup/restore operations.'
+    }
+  },
+  {
+    number: '07',
+    type: 'CI/CD • JENKINS • CONTAINER DELIVERY',
+    title: 'Jenkins CI/CD Pipeline for Containerized Apps',
+    description: 'Built a Jenkins pipeline that checks out source code, builds and tags a Docker image, authenticates securely and publishes the image to Docker Hub. The workflow continues with container deployment on an AWS EC2 environment.',
+    stack: ['Git', 'GitHub', 'Jenkins', 'Docker', 'Docker Hub', 'AWS EC2', 'Linux'],
+    flow: ['GIT CHECKOUT', 'JENKINS', 'DOCKER BUILD', 'DOCKER HUB', 'EC2 DEPLOY'],
+    visual: 'jenkins',
+    details: {
+      architecture: 'Jenkins retrieves the application source from Git, builds a Docker image and publishes it to Docker Hub. A deployment stage then runs the container on the target EC2 host.',
+      implementation: [
+        'Configured Jenkins and its Java runtime on the Linux environment.',
+        'Created a Jenkinsfile with source checkout, Docker build, publish and deployment stages.',
+        'Tagged the built image and pushed it to Docker Hub.',
+        'Used Jenkins credentials binding for registry authentication instead of placing credentials directly in pipeline commands.',
+        'Ran the container on the EC2 deployment host and checked the running service.'
+      ],
+      engineering: 'The pipeline required resolving Jenkins runtime/setup issues, Docker daemon permissions and secure credential handling for registry authentication.',
+      result: 'An end-to-end CI/CD practice pipeline connecting source control, image creation, registry publishing and EC2 container deployment.'
+    }
+  }
+];
+
+// Earlier portfolio projects are intentionally retained alongside the newer hands-on DevOps builds.
+const legacyProjects = [
   {
     number: '01',
     type: 'CI/CD • CLOUD DEPLOYMENT',
@@ -76,6 +227,82 @@ const projects = [
   }
 ];
 
+const legacyProjectDetails = {
+  'Cloud-Native CI/CD Pipeline': {
+    architecture: 'The original portfolio record describes a delivery pipeline connecting GitHub, Jenkins, Docker and AWS EC2. The documented flow is represented below; the earlier record does not include a more detailed infrastructure diagram.',
+    implementation: [
+      'Integrated GitHub source control with a Jenkins pipeline.',
+      'Automated Docker image building, versioning and deployment through Jenkins.',
+      'Used the AWS EC2 environment as the application deployment target.'
+    ],
+    engineering: 'The original project summary does not record a specific troubleshooting incident or measured performance result, so none is asserted here.',
+    result: 'A CI/CD project demonstrating source control integration, automated container image delivery and cloud deployment.'
+  },
+  'Infrastructure Provisioning with Terraform': {
+    architecture: 'Terraform is used to define AWS infrastructure across compute, networking and identity resources. The project flow and scope below reflect the original portfolio description.',
+    implementation: [
+      'Used Terraform to define AWS infrastructure as code.',
+      'Worked across compute, networking and identity resources.',
+      'Applied an Infrastructure as Code approach for repeatable provisioning.'
+    ],
+    engineering: 'The original project summary does not record a specific troubleshooting incident or measured performance result, so none is asserted here.',
+    result: 'A hands-on Infrastructure as Code project covering repeatable AWS resource provisioning.'
+  },
+  'Job Search Automation App': {
+    architecture: 'The Python automation gathers job listings from LinkedIn, Google and Naukri using user preferences, then filters and sorts the results before sending a daily email summary through Gmail SMTP.',
+    implementation: [
+      'Collected job listings from LinkedIn, Google and Naukri.',
+      'Applied user preferences to filter and sort relevant listings.',
+      'Sent the daily summary through Gmail SMTP.'
+    ],
+    engineering: 'The original project summary does not record a specific troubleshooting incident or measured performance result, so none is asserted here.',
+    result: 'An automation application that consolidates job listings and delivers a sorted daily email summary.'
+  },
+  'AWS Full-Stack Form Application': {
+    architecture: 'The original project record describes a form-based application deployed on AWS, using EC2 for the backend, S3 for static assets and RDS for the database.',
+    implementation: [
+      'Deployed the backend on AWS EC2.',
+      'Used Amazon S3 to host static assets.',
+      'Used Amazon RDS as the application database.'
+    ],
+    engineering: 'The original project summary does not record a specific troubleshooting incident or measured performance result, so none is asserted here.',
+    result: 'An end-to-end AWS deployment exercise combining compute, static asset storage and a managed relational database.'
+  },
+  'Diabetes Prediction Web App': {
+    architecture: 'The project uses a Support Vector Machine classifier in an ML-powered web application. The original description records preprocessing, feature selection, model training, evaluation and AWS deployment.',
+    implementation: [
+      'Prepared health data through preprocessing and feature selection.',
+      'Trained and evaluated a Support Vector Machine classifier.',
+      'Deployed the web application in an AWS environment.'
+    ],
+    engineering: 'The original project summary does not record model metrics, a specific troubleshooting incident or clinical validation; none is asserted here.',
+    result: 'A machine-learning web application demonstrating an SVM-based prediction workflow and cloud deployment.'
+  },
+  'OCR-Based Text Extraction Tool': {
+    architecture: 'The Python application processes scanned documents and images through grayscale and thresholding steps before using a CNN-based OCR approach to extract text.',
+    implementation: [
+      'Built the text-extraction workflow in Python.',
+      'Applied grayscale and thresholding preprocessing to document images.',
+      'Used a CNN-based OCR approach for printed and handwritten text extraction.'
+    ],
+    engineering: 'The original project summary does not record a specific accuracy metric or benchmark, so none is asserted here.',
+    result: 'An image-processing and OCR tool for extracting text from scanned documents and images.'
+  }
+};
+
+const projects = [
+  ...legacyProjects.map((project, index) => ({
+    ...project,
+    number: String(index + 1).padStart(2, '0'),
+    details: legacyProjectDetails[project.title]
+  })),
+  ...deploymentProjects.map((project, index) => ({
+    ...project,
+    number: String(legacyProjects.length + index + 1).padStart(2, '0')
+  }))
+];
+
+
 const experiences = [
   { year: '2025 → NOW', company: 'KODS Technologies', role: 'DevOps Intern', points: ['Jenkins + Git CI/CD workflows', 'Docker containerization on Linux', 'Terraform provisioning + shell automation', 'AWS microservices deployment', 'Kubernetes orchestration for containerized workloads'] },
   { year: 'FEB → AUG 2025', company: 'Visionet Systems', role: 'CloudOps Intern', points: ['Enterprise cloud operations exposure', 'AWS + Microsoft Azure architecture', 'Deployment models + ITIL concepts', 'Cloud engineering foundation'] },
@@ -85,6 +312,7 @@ const experiences = [
 const skills = [
   { title: 'CLOUD', items: ['AWS', 'Microsoft Azure', 'EC2', 'S3', 'IAM', 'VPC', 'RDS', 'CloudWatch', 'Auto Scaling', 'ELB'] },
   { title: 'DEVOPS', items: ['Git', 'GitHub Actions', 'Jenkins', 'Docker', 'Kubernetes', 'Terraform', 'Ansible'] },
+  { title: 'MONITORING', items: ['Prometheus', 'Grafana'] },
   { title: 'CODE', items: ['Python', 'Java', 'C', 'Bash', 'MySQL', 'Linux'] }
 ];
 
@@ -92,8 +320,10 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [navHidden, setNavHidden] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
+  const [projectIndex, setProjectIndex] = useState(1);
   const lastScroll = useRef(0);
   const cursor = useRef(null);
+  const projectsRail = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -158,6 +388,26 @@ function App() {
     rail.addEventListener('wheel', wheel, { passive: false });
     return () => rail.removeEventListener('wheel', wheel);
   }, []);
+
+  const updateProjectIndex = () => {
+    const rail = projectsRail.current;
+    if (!rail) return;
+    const card = rail.querySelector('.project-card');
+    if (!card) return;
+    const styles = window.getComputedStyle(rail);
+    const gap = Number.parseFloat(styles.columnGap || styles.gap) || 18;
+    const stride = card.getBoundingClientRect().width + gap;
+    setProjectIndex(Math.min(projects.length, Math.max(1, Math.round(rail.scrollLeft / stride) + 1)));
+  };
+
+  const scrollProjects = (direction) => {
+    const rail = projectsRail.current;
+    if (!rail) return;
+    const card = rail.querySelector('.project-card');
+    if (!card) return;
+    const gap = Number.parseFloat(window.getComputedStyle(rail).columnGap || window.getComputedStyle(rail).gap) || 18;
+    rail.scrollBy({ left: direction * (card.getBoundingClientRect().width + gap), behavior: 'smooth' });
+  };
 
   const jump = (id) => {
     document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -241,21 +491,26 @@ function App() {
             <div><span className="section-number">04</span><span className="section-name">SELECTED WORK</span></div>
             <h2>Systems,<br /><span>not screenshots.</span></h2>
           </div>
-          <div className="projects-rail">
+          <div className="projects-rail" ref={projectsRail} onScroll={updateProjectIndex}>
             {projects.map((project) => (
               <article className="project-card" key={project.number} data-reveal>
-                <div className="project-topline"><span>{project.number} / {projects.length}</span><span>{project.type}</span></div>
-                <ProjectVisual project={project} />
+                <div className="project-topline"><span>PROJECT / {project.number}</span><span>{project.type}</span></div>
                 <div className="project-content">
+                  <div className="project-card-index">{project.number} <span>— SELECTED BUILD</span></div>
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
-                  <div className="chips">{project.stack.map((x) => <span className="skill-chip" key={x}>{x}</span>)}</div>
+                  <div className="chips">{project.stack.slice(0, 4).map((x) => <span className="skill-chip" key={x}>{x}</span>)}{project.stack.length > 4 && <span className="skill-chip skill-chip--more">+{project.stack.length - 4} MORE</span>}</div>
                   <button className="text-link" onClick={() => setActiveProject(project)}>Inspect system <span>↗</span></button>
                 </div>
               </article>
             ))}
           </div>
-          <div className="work-foot"><span>Scroll horizontally through the build log</span><span>→ → →</span></div>
+          <div className="projects-controls" aria-label="Project navigation">
+            <button className="projects-arrow" onClick={() => scrollProjects(-1)} aria-label="Previous projects">←</button>
+            <span>EXPLORE THE BUILDS <i>—</i> {String(projectIndex).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+            <button className="projects-arrow" onClick={() => scrollProjects(1)} aria-label="Next projects">→</button>
+          </div>
+          <div className="work-foot"><span>Hands-on cloud, DevOps &amp; observability builds</span><span>SELECT A PROJECT TO INSPECT ↗</span></div>
         </section>
 
         <section className="stack-section" id="stack">
@@ -377,13 +632,13 @@ function HeroSystemVisual() {
 
 function ProjectVisual({ project }) {
   const labels = {
-    cicd: ['GIT', 'JENKINS', 'DOCKER', 'K8S', 'AWS'],
-    terraform: ['TF', 'VPC', 'IAM', 'EC2', 'S3'],
-    fullstack: ['USER', 'FLASK', 'EC2', 'RDS', 'S3'],
-    jobs: ['LINKEDIN', 'GOOGLE', 'NAUKRI', 'SORT', 'SMTP'],
-    form: ['FORM', 'FLASK', 'EC2', 'S3', 'RDS'],
-    ml: ['DATA', 'SVM', 'MODEL', 'EC2', 'RDS'],
-    ocr: ['IMAGE', 'PREPROCESS', 'CNN', 'TEXT', 'EXPORT']
+    eks: ['TERRAFORM', 'VPC + EKS', 'HELM', 'INGRESS', 'METRICS'],
+    ansible: ['GIT PUSH', 'ACTIONS', 'ANSIBLE', 'EC2 NODES', 'NGINX'],
+    docker: ['GIT PUSH', 'ACTIONS', 'FRONTEND', 'NGINX', 'API'],
+    kubernetes: ['IMAGE', 'MINIKUBE', 'DEPLOY', 'SERVICE', 'POD'],
+    monitoring: ['HELM', 'PROMETHEUS', 'METRICS', 'GRAFANA', 'DASHBOARD'],
+    mongodb: ['APP', 'COMPOSE', 'MONGODB', 'DATA VOL', 'BACKUP'],
+    jenkins: ['GIT', 'JENKINS', 'DOCKER', 'REGISTRY', 'EC2']
   };
   return (
     <div className={`project-visual project-visual--${project.visual}`}>
@@ -404,8 +659,47 @@ function ProjectVisual({ project }) {
 }
 
 function ProjectModal({ project, onClose }) {
-  useEffect(() => { document.body.style.overflow = 'hidden'; return () => { document.body.style.overflow = ''; }; }, []);
-  return <div className="modal-backdrop" onClick={onClose}><div className="modal" onClick={(e) => e.stopPropagation()}><button className="modal-close" onClick={onClose}>CLOSE ×</button><span className="mini-label">PROJECT {project.number}</span><h2>{project.title}</h2><p>{project.description}</p><div className="modal-flow">{project.flow.map((x, i) => <div key={x}><span>{String(i + 1).padStart(2, '0')}</span><strong>{x}</strong></div>)}</div><div className="chips">{project.stack.map((x) => <span className="skill-chip" key={x}>{x}</span>)}</div></div></div>;
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (event) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby={`project-title-${project.number}`} onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close project details">CLOSE ×</button>
+        <span className="mini-label">PROJECT {project.number} / CASE STUDY</span>
+        <h2 id={`project-title-${project.number}`}>{project.title}</h2>
+        <p>{project.description}</p>
+        <div className="case-study-block">
+          <span className="case-study-label">01 / ARCHITECTURE &amp; DELIVERY FLOW</span>
+          <p>{project.details.architecture}</p>
+          <div className="modal-flow">{project.flow.map((x, i) => <div key={`${project.number}-${x}`}><span>{String(i + 1).padStart(2, '0')}</span><strong>{x}</strong></div>)}</div>
+        </div>
+        <div className="case-study-grid">
+          <div className="case-study-block">
+            <span className="case-study-label">02 / IMPLEMENTATION</span>
+            <ul>{project.details.implementation.map((item) => <li key={item}>{item}</li>)}</ul>
+          </div>
+          <div className="case-study-block">
+            <span className="case-study-label">03 / ENGINEERING NOTES</span>
+            <p>{project.details.engineering}</p>
+            <span className="case-study-label case-study-label--result">04 / OUTCOME</span>
+            <p>{project.details.result}</p>
+          </div>
+        </div>
+        <div className="case-study-block case-study-stack">
+          <span className="case-study-label">TECH STACK</span>
+          <div className="chips">{project.stack.map((x) => <span className="skill-chip" key={x}>{x}</span>)}</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 createRoot(document.getElementById('root')).render(<App />);
